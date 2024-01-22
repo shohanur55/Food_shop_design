@@ -2,7 +2,9 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medical_appoinment_app_design/bottomNavigation.dart';
 import 'package:medical_appoinment_app_design/controller/getx_controllers.dart';
+import 'package:medical_appoinment_app_design/orderPage.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -25,7 +27,7 @@ myControllers c=Get.put(myControllers());
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
+                    CircleAvatar (
                       radius: 30, // Adjust radius as needed
                       backgroundImage: AssetImage('lib/assets/images/img.jpg'),
                     ),
@@ -58,9 +60,7 @@ myControllers c=Get.put(myControllers());
                     Radius.circular(13),
                   ),
                   child: Image(
-                    image: NetworkImage(
-                      'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                    ),
+                    image: AssetImage('lib/assets/images/first.jpeg'),
                     fit: BoxFit.cover,
                     width: double.infinity,
                   // height: 189,
@@ -106,22 +106,7 @@ myControllers c=Get.put(myControllers());
                     ],
                   )
 
-                  // Row(
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(left: 15.0),
-                  //       child: Icon(
-                  //         Icons.search,
-                  //         color: Colors.grey,
-                  //       ),
-                  //     ),
-                  //     Text(
-                  //       '  Search here your favourite food',
-                  //       style: TextStyle(
-                  //           color: Colors.black45, fontWeight: FontWeight.bold),
-                  //     )
-                  //   ],
-                  // ),
+
                 ),
                 SizedBox(
                   height: 8,
@@ -140,7 +125,7 @@ myControllers c=Get.put(myControllers());
                           Axis.horizontal, // Set scroll direction to horizontal
                       itemCount: c.foods.length,
                       itemBuilder: (context, index) {
-                        Map<String, dynamic> food = c.foods[index];
+                        Map<dynamic, dynamic> food = c.foods[index];
                         return Container(
                           width: 90, // Adjust width as needed
                           child: Column(
@@ -218,77 +203,85 @@ myControllers c=Get.put(myControllers());
                           Axis.horizontal, // Set scroll direction to horizontal
                       itemCount: c.foods.length,
                       itemBuilder: (context, index) {
-                        Map<String, dynamic> food = c.foods[index];
-                        return Container(
-                          margin: EdgeInsets.only(right: 10),
-                          width: 90,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.green, // Adjust color as needed
-                              width: 1, // Adjust width as needed
+                        Map<dynamic, dynamic> food = c.foods[index];
+                        return InkWell(
+                          onTap: (){
+                            Get.to(() => OrderPage(
+                              f_name:food!['f_name'],
+                            f_pic: food!['f_pic'],
+                              f_price: food!['f_price'],
+                              f_index:food.toString(),
+
+                            ));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10),
+                            width: 90,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.green, // Adjust color as needed
+                                width: 1, // Adjust width as needed
+                              ),
                             ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Display image
-                              ClipRRect(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(13),
-                                ),
-                                child: Image.asset(
-                                  food['f_pic'],
-                                  height: 90,
-
-                                  fit: BoxFit.cover, // Adjust height as needed
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              // Display name and price
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    food['f_name'],
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Display image
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(13),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (c.favouriteList.contains(c.foods[index].toString())) {
-                                        c.removeitem(c.foods[index].toString());
-                                      } else {
-                                        c.additem(c.foods[index].toString());
-                                      }
-                                    },
-                                    child: Obx(
-                                          () => c.favouriteList.contains(c.foods[index].toString())
-                                              ?Icon(
-                                            Icons.favorite,color:Colors.red)
-                            :Icon(Icons.favorite_outline,color:Colors.red),
+                                  child: Image.asset(
+                                    food['f_pic'],
+                                    height: 90,
 
-                                      ),
+                                    fit: BoxFit.cover, // Adjust height as needed
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                // Display name and price
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      food['f_name'],
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green),
                                     ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (c.favouriteList.contains(c.foods[index].toString())) {
+                                          c.removeitem(c.foods[index].toString());
+                                        } else {
+                                          c.additem(c.foods[index].toString());
+                                        }
+                                      },
+                                      child: Obx(
+                                            () => c.favouriteList.contains(c.foods[index].toString())
+                                                ?Icon(
+                                              Icons.favorite,color:Colors.red)
+                              :Icon(Icons.favorite_outline,color:Colors.red),
 
-                                    // Icon(
-                                    //   Icons.favorite_outline,
-                                    //   color: Colors.red,
-                                    // ),
+                                        ),
+                                      ),
 
-                                ],
-                              ),
-                              Text(
-                                food['f_price'],
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ],
+
+
+                                  ],
+                                ),
+                                Text(
+                                  food['f_price'].toString()+'\$',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -297,30 +290,7 @@ myControllers c=Get.put(myControllers());
             ), ],
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.green,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home, color: Colors.white),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search, color: Colors.white),
-                label: 'Search',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                label: 'Profile',
-              ),
-            ],
-            selectedItemColor:
-                Colors.white, // Color for the selected item's label
-            unselectedItemColor: Colors.white
-            // Handle tab selection changes
-            ),
+        bottomNavigationBar:BottomNavigation(),
       ),
     );
   }
